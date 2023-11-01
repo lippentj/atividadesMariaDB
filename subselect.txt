@@ -1,0 +1,17 @@
+1-
+SELECT first_name, last_name, job_id
+FROM employees
+WHERE job_id = (SELECT job_id FROM employees WHERE first_name = 'Curtis' AND last_name = 'Davies');
+2-
+select l.street_address, d.department_name
+from departments d, location l
+where l.location_id=d.location_id
+and d.department_id=(select department_id from employees where first_name ='Steven' and last_name = 'King'); 
+3-
+SELECT *
+FROM employees
+WHERE hire_date > (
+    SELECT MAX(hire_date)
+    FROM employees
+    WHERE department_id = (SELECT department_id FROM departments WHERE department_name = 'IT')
+);
