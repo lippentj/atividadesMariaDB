@@ -1,0 +1,78 @@
+1-
+SELECT first_name, last_name, job_id
+FROM employees
+WHERE job_id = (SELECT job_id FROM employees WHERE first_name = 'Curtis' AND last_name = 'Davies');
+2-
+select l.street_address, d.department_name
+from departments d, location l
+where l.location_id=d.location_id
+and d.department_id=(select department_id from employees where first_name ='Steven' and last_name = 'King'); 
+3-
+SELECT *
+FROM employees
+WHERE hire_date > (
+    SELECT MAX(hire_date)
+    FROM employees
+    WHERE department_id = (SELECT department_id FROM departments WHERE department_name = 'IT')
+);
+4-
+create view paise_locais as
+select c.country_id as id, c.country_name, 
+l.*
+from countries c, locations l
+where c.country_id=l.country_id;
+5-
+create or replace view endereco as
+select concat(e.first_name,e.last_name) as funcionario,
+l.*
+from amployees e, locations l, departments d
+where e.department_id=d.department_id
+and dlocation_id=l.location_id;
+6-
+select concat(e1.first_name,'',last_name) as funcionario,
+e1.salary
+from employees e1
+where e1.salary >  (select avg(e2.salary) from employees e2)
+
+select avg(salary)
+from employees;
+__________________________________________________________
+ 
+7-
+select d.department_name, concat(e1.employee_id) as total_dp,
+(select count(e2.employee_id) from employees e2) as total
+from employees e1, departments d 
+where e1.department_id=d.department_id
+group by d.department_name;
+----
+
+select j.job_title
+from jobs j, job_history jh, employees e
+where e.job_id=jh.job_id
+and jh.job_id=j.job_id
+and e.employee_id not in
+(select jh2.employee_id from job_history jh2)
+group by j.job_title;
+
+select * from job_history;
+
+----------
+8-
+select j2.job_title
+from jobs j2
+where j2.job_id not in
+(select j.job_id
+from jobs j
+inner join job_history jh
+on j.job_id=jh.job_id);
+
+9-
+select l.country_id, count(e.employee_id)
+from employees e
+inner join departments d
+on e.department_id=d.department_id
+inner join locations l
+on d.location_id=l.location_id
+group by l.country_id;
+
+10-
